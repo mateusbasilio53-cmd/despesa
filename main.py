@@ -3,6 +3,15 @@ import sqlite3
 conexao = sqlite3.connect('financas.db')
 cursor = conexao.cursor()
 
+# Criar tabela se não existir
+cursor.execute('''CREATE TABLE IF NOT EXISTS despesas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    descricao TEXT,
+    categoria TEXT,
+    valor REAL,
+    data TEXT
+)''')
+
 print('Rastreador de despesas pessoal')
 
 while True:
@@ -10,7 +19,8 @@ while True:
     print('Menu:')
     print('1. Adicionar despesa')
     print('2. Ver despesas')
-    print('3. Sair')
+    print('3. Deletar despesa')
+    print('4. Sair')
     print('-------------------------------')
 
     opcao = input('Escolha uma opção: ')
@@ -35,7 +45,14 @@ while True:
             print(f'ID: {despesa[0]}, Descrição: {despesa[1]}, Categoria: {despesa[2]}, Valor: R${despesa[3]:.2f}, Data: {despesa[4]}')
 
     elif opcao == '3':
+        id_deletar = int(input('Digite o ID da despesa a deletar: '))
+        cursor.execute('DELETE FROM despesas WHERE id = ?', (id_deletar,))
+        conexao.commit()
+        print(f'Despesa com ID {id_deletar} deletada com sucesso!')
+
+    elif opcao == '4':
         print('Saindo...')
+        conexao.close()
         break
 
     else:

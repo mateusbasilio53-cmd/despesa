@@ -15,3 +15,4 @@ cursor.execute('''
 
 
 conexao.commit()
+conexao.close()
