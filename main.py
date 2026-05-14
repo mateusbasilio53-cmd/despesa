@@ -3,7 +3,6 @@ import sqlite3
 conexao = sqlite3.connect('financas.db')
 cursor = conexao.cursor()
 
-# Criar tabela se não existir
 cursor.execute('''CREATE TABLE IF NOT EXISTS despesas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     descricao TEXT,
@@ -28,7 +27,13 @@ while True:
     if opcao == '1':
         descricao = input('Digite a descrição da despesa: ')
         categoria = input('Digite a categoria da sua despesa: ')
-        valor = float(input('Digite o valor da despesa: '))
+        while True:
+            try:
+                valor = float(input('Digite o valor da despesa: '))
+                break
+            except ValueError:
+                print('Valor inválido. Por favor, digite um número.')
+
         data = input('Digite a data da despesa (DD/MM/AAAA): ')
         cursor.execute('''
             INSERT INTO despesas (descricao, categoria, valor, data)
